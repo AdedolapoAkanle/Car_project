@@ -4,7 +4,7 @@ class Database {
     private $host = 'localhost';
     private $user = 'root';
     private $password = '';
-    private $databaseName = 'gallery_db';
+    private $databaseName = 'car_project';
     
     private $con = false;
     private $myConn = '';
@@ -17,9 +17,9 @@ class Database {
         $this->myConn = new mysqli($this->host, $this->user, $this->password, $this->databaseName);
 
         if ($this->myConn->connect_errno) {
-            die("Database connection Failed" . $this->myConn->connect_errno());
+            die("Database connection Failed" . $this->myConn->connect_errno);
             $this->con = false;
-        }else{
+        }else{ 
             $this->con = true;
         }
     } 
@@ -36,7 +36,7 @@ class Database {
     }
 
     public function escape($string) {
-        return strtolower(trim(addslashes(mysqli_real_escape_string($this->connection,$string)));
+        return strtolower(trim(addslashes(mysqli_real_escape_string($this->myConn,$string))));
     }
 
     public function getSql() {
@@ -57,47 +57,57 @@ class Database {
         return $val;
     }
 
-    public function escape($data) {
-        return strtolower(trim(addslashes($this->myConn->real_escape_string($data))));
+    // public function escape($data) {
+    //     return strtolower(trim(addslashes($this->myConn->real_escape_string($data))));
+    // }
+
+    public function countRows($table, $field ="*", $condition) { 
+
+        $this->sql("SELECT $field FROM $table WHERE $condition");
+        return $this->getNumberOfRows();
     }
- 
-}
+    
+    // these are the CRUD methods
+    public function save($table, $sql) {
 
-public function countRows($table, $field ="*", $condition){ 
-    $this->sql("SELECT $field FROM $table WHERE $condition");
-    return $this->getNumberOfRows();
-}
+        return $this->sql("INSERT INTO $table SET $sql");
+    }
+    
+    public function saveChanges($table, $sql,$condition){ 
+        return $this->sql("UPDATE $table SET $sql WHERE $condition");
+    }
+    
+    public function erase($table, $condition){
+        return $this->sql("DELETE FROM $table WHERE $condition");
+    }
+    
+    public function lookUp($table, $field ="*", $condition = "", $column = ""){
+        $con = !empty($condition) ? " WHERE $condition" : "";
+        $this->sql("SELECT $field FROM $table $con");
+        $rlt = $this->getResult();
 
-// these are the CRUD methods
-public function save($table, $sql){
-    return $this->sql("INSERT INTO $table SET $sql");
-}
+        if(!empty($rlt)) {
 
-public function saveChanges($table, $sql,$condition){ 
-    return $this->sql("UPDATE $table SET $sql WHERE $condition");
-}
+            if(is_object($rlt) || is_array($rlt)) {
 
-public function erase($table, $condition){
-    return $this->sql("DELETE FROM $table WHERE $condition");
-}
+                if(!empty($column)) {
 
-public function lookUp($table, $field ="*", $condition = "", $column = ""){
-    $con = !empty($condition) ? " WHERE $condition" : "";
-    $this->sql("SELECT $field FROM $table $con");
-    $rlt = $this->getResult();
-    if(!empty($rlt)){
-        if(is_object($rlt) || is_array($rlt)){
-            if(!empty($column)){
-                if(!empty($rlt[0][$column])){
-                    return $rlt[0][$column];
+                    if(!empty($rlt[0][$column])) {
+
+                        return $rlt[0][$column];
+                    }
+                } else {
+
+                    return $rlt;
                 }
-            }else{
-                return $rlt;
             }
-        }
-   }
+       }
+    }
+     
+     
+ 
 }
- 
- 
+
+
 
 ?>
