@@ -1,10 +1,12 @@
 <?php 
+
+
 class Database {
 
     private $host = 'localhost';
     private $user = 'root';
     private $password = '';
-    private $databaseName = 'gallery_db';
+    private $databaseName = 'car_project';
     
     private $con = false;
     private $myConn = '';
@@ -17,7 +19,7 @@ class Database {
         $this->myConn = new mysqli($this->host, $this->user, $this->password, $this->databaseName);
 
         if ($this->myConn->connect_errno) {
-            die("Database connection Failed" . $this->myConn->connect_errno());
+            die("Database connection Failed" . $this->myConn->connect_errno);
             $this->con = false;
         }else{
             $this->con = true;
@@ -27,7 +29,7 @@ class Database {
     public function sql($sql) {
         $this->myQuery = $sql; 
         $result = $this->myConn->query($sql); 
-        $this->numResults = $this->myConn->num_rows; 
+        // $this->numResults = $this->myConn->num_rows; 
         if(!$result) {
             die("Query failed" . $this->myConn->error);
         }  
@@ -36,7 +38,7 @@ class Database {
     }
 
     public function escape($string) {
-        return strtolower(trim(addslashes(mysqli_real_escape_string($this->connection,$string)));
+        return strtolower(trim(addslashes(mysqli_real_escape_string($this->myConn,$string))));
     }
 
     public function getSql() {
@@ -57,11 +59,11 @@ class Database {
         return $val;
     }
 
-    public function escape($data) {
-        return strtolower(trim(addslashes($this->myConn->real_escape_string($data))));
-    }
+    // public function escape($data) {
+    //     return strtolower(trim(addslashes($this->myConn->real_escape_string($data))));
+    // }
  
-}
+
 
 public function countRows($table, $field ="*", $condition){ 
     $this->sql("SELECT $field FROM $table WHERE $condition");
@@ -83,21 +85,31 @@ public function erase($table, $condition){
 
 public function lookUp($table, $field ="*", $condition = "", $column = ""){
     $con = !empty($condition) ? " WHERE $condition" : "";
-    $this->sql("SELECT $field FROM $table $con");
+   $qur =  $this->sql("SELECT $field FROM $table $con");
     $rlt = $this->getResult();
-    if(!empty($rlt)){
-        if(is_object($rlt) || is_array($rlt)){
-            if(!empty($column)){
-                if(!empty($rlt[0][$column])){
-                    return $rlt[0][$column];
-                }
-            }else{
-                return $rlt;
-            }
-        }
-   }
+//     if(!empty($rlt)){
+//         if(is_object($rlt) || is_array($rlt)){
+//             if(!empty($column)){
+//                 // if(!empty($rlt[0][$column])){
+//                     return $rlt[0][$column];
+//                 // }
+//             }else{
+//                 return $rlt;
+//             }
+//         }
+//    }
+
+   while($row = mysqli_fetch_array($qur)) {
+    echo "<form>";
+        echo "<td>{$row['name']}</td> ";
+        echo "<td>{$row['type']}</td> ";
+        echo "<td>{$row['color']}</td> ";
+    echo "</form> <br>";
 }
- 
+}
+
+
+}
  
 
 ?>
