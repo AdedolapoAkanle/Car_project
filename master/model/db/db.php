@@ -39,7 +39,7 @@ class Database {
                 $r = $query->fetch_array();
                 $key = array_keys($r);
                 for ($x = 0; $x < count($key); $x++) {
-                    // Sanitizes keys so only alphavalues are allowed
+                    // Sanitizes keys so only alpha-values are allowed
                     if (!is_int($key[$x])) {
                         if ($query->num_rows >= 1) {
                             $this->result[$i][$key[$x]] = $r[$key[$x]];
