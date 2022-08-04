@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,31 +11,33 @@
 <body>
     <?php if(isset($_GET['msg'])) echo $_GET['msg']; ?>
     <form method="Post" action="../model/backend.php">
-        <label for="name">Car name:</label><br>
+        <label for="name">Name:</label><br>
         <input type="text" id="name" name="name" value="<?php $name; ?>"><br>
-        <label for="type">Car Type:</label><br>
-        <input type="text" id="type" name="type" value="<?php $carType; ?>"><br>
-        <label for="color">Car color:</label><br>
-        <input type="text" id="color" name="color" value="<?php $carColor; ?>"><br>
+        <label for="type">Gender:</label><br>
+        <input type="text" id="gender" name="gender" value="<?php $gender; ?>"><br>
+        <label for="color">Age:</label><br>
+        <input type="text" id="age" name="age" value="<?php $age; ?>"><br>
         <input type="submit" name="submit">
     </form>
-   
+
 </body>
 <table>
-<?php
+    <?php
 require("../model/db/db.php");
-$db = new Database(); 
-$rlt = $db->lookUp("user"); 
+require("../classes/Users/Users.php");
+$usr = new Users(); 
+$rlt = $usr->userInfo(); 
 if(!empty($rlt)){
     foreach ($rlt as  $row) {  
 
     echo" <tr>
             <td>{$row['name']} </td>
-            <td>{$row['type']}</td>
-            <td>{$row['color']}</td>
+            <td>{$row['gender']}</td>
+            <td>{$row['age']}</td>
         </tr>";
     } 
 }
 ?>
 </table>
+
 </html>
