@@ -10,8 +10,8 @@ class Fun {
 
     } 
 
-    public static function reDirect($url) {
-        header("Location:$url"); exit;
+    public static function reDirect($url,$type,$msg) {
+        header("Location:$url?$type=$msg"); exit;
     } 
 
 

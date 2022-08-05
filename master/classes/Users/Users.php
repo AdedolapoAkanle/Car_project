@@ -1,22 +1,24 @@
 <?php
 
+
 class Users extends Database {
     public $name;
     public $gender;
     public $age;
     public $status;
     public $table = "user";
+    public $result;
 
     public function userInfo($conditions = "",$field = "*", $column ="") {
        return $this->lookUp($this->table,$field,$conditions,$column);
     } 
     
     public function countUserRows($conditions) {
-      return $this->countRows($this->table,"",$conditions);
+      return $this->countRows($this->table,"*",$conditions);
     }
     
-    public function isExists($condition) {
-      $rlt = $this->countUserRows($condition);
+    public function isExists($conditions) {
+      $rlt = $this->countUserRows($conditions);
       if($rlt > 0){
         return true;
       }else{
@@ -25,13 +27,22 @@ class Users extends Database {
     }
     
      public function singleUserInfo($userId) {
-         $rlt = $this->userInfo("id = '$userId'");
-         $this->name = $rlt['name'];
-         $this->gender = $rlt['gender'];
-         $this->age = $rlt['age'];
-         $this->status = $rlt['status'];
+         $this->result = $this->userInfo("id = '$userId'");
+         $this->name = $this->result['name'];
+         $this->gender = $this->result['gender'];
+         $this->age = $this->result['age'];
+         $this->status = $this->result['status'];
       }
 
+    public function editSingleUserInfo($userId) {
+      return $this->singleUserInfo($userId);
+    }
+
+    public function userResult($userId) {
+      $this->singleUserInfo($userId);
+      return $this->result;
+
+    }
      public function userName($userId) {
          $this->singleUserInfo($userId);
          return $this->name;
@@ -66,25 +77,28 @@ class Users extends Database {
 
      public function validateUser(){
         if(Fun::checkEmptyInput([$this->name,$this->age,$this->gender])){
-            echo  "None of the fields must be empty"; 
-    
+            Fun::reDirect("../views/user.php", "msg", "None of the fields must be empty");
+           exit;
         }
 
         if(is_numeric($this->name)){
-            echo "Name must be in text only"; 
+            Fun::reDirect("../views/user.php", "msg","Name must be in text only");
+            exit;
     
-
-       if($this->isExists("name = '$this->name'")){
-            echo "This name already exists";
-    
-       }
+        }
        
        if(!is_numeric($this->age)){
-        echo "Age must be in number only";
+          Fun::reDirect("../views/user.php", "msg", "Age must be in number only");
+          exit;
 
        }
+       
+       if($this->isExists("name = '$this->name'")){
+          Fun::reDirect("../views/user.php", "msg", "This name already exists");
+          exit;
 
-     }
+    }
+    
     }
 
      public function processUser($name,$gender,$age){

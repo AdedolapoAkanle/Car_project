@@ -1,3 +1,7 @@
+<?php 
+require("../model/db/db.php");
+require("../classes/Users/Users.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +13,18 @@
 </head>
 
 <body>
-    <?php if(isset($_GET['msg'])) echo $_GET['msg']; ?>
+    <?php
+    //  if(isset($_GET['msg'])) echo $_GET['msg'];
+
+    // echo $msg;
+
+    $msg = "";
+    
+    if(isset($_GET['msg'])) {
+        echo $_GET['msg'];
+    
+    }
+     ?>
     <form method="Post" action="../model/backend.php">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name" value="<?php $name; ?>"><br>
@@ -23,8 +38,7 @@
 </body>
 <table>
     <?php
-require("../model/db/db.php");
-require("../classes/Users/Users.php");
+
 $usr = new Users(); 
 $rlt = $usr->userInfo(); 
 if(!empty($rlt)){
