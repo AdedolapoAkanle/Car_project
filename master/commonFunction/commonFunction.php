@@ -11,13 +11,13 @@ class Fun {
     } 
 
     public static function reDirect($url) {
-        header("Location:$url");
+        header("Location:$url"); exit;
     } 
 
 
     public static function checkEmptyInput($params=[]) {
-        for ($i=0; $i < sizeof($params); $i++) { 
-            if (isset($params[$i]) || empty($params[$i])) {
+        for ($i=0; $i < count($params); $i++) { 
+            if (!isset($params[$i]) || empty($params[$i])) {
                 return true;
             }
         }

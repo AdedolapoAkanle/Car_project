@@ -21,7 +21,7 @@ class Database {
         if ($this->myConn->connect_errno) {
             die("Database connection Failed" . $this->myConn->connect_errno);
             $this->con = false;
-        }else{
+        } else{
             $this->con = true;
         }
     } 

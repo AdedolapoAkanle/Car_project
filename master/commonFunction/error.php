@@ -3,7 +3,7 @@
 // $load = "";
 // if(isset($_REQUEST['msg'])) $load = $_REQUEST['msg'];
 // switch($load){
-//     case "empt": 
+//     case "y": 
 //         $m = "None of the fields must not be empty";
 //         break;
 //     case "tempt":

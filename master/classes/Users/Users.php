@@ -65,23 +65,27 @@ class Users extends Database {
      }
 
      public function validateUser(){
-        if(Fun::checkEmptyInput($this->name,$this->age,$this->gender)){
-            return "None of the fields must be empty";
+        if(Fun::checkEmptyInput([$this->name,$this->age,$this->gender])){
+            echo  "None of the fields must be empty"; 
+    
         }
 
         if(is_numeric($this->name)){
-            return "Name must be in text only";
-       }
+            echo "Name must be in text only"; 
+    
 
        if($this->isExists("name = '$this->name'")){
-        return "This name already exists";
+            echo "This name already exists";
+    
        }
        
        if(!is_numeric($this->age)){
-        return "Age must be in number only";
+        echo "Age must be in number only";
+
        }
 
      }
+    }
 
      public function processUser($name,$gender,$age){
         $this->name = $this->escape($name);
