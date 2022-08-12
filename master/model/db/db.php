@@ -31,7 +31,7 @@ class Database {
         $query = $this->myConn->query($sql);
         
         $this->myQuery = $sql; // Pass back the SQL
-        if ($query) {
+        if ($query) { 
             // If the query returns >= 1 assign the number of rows to numResults
             $this->numResults = @$query->num_rows;
             // Loop through the query results by the number of rows returned
